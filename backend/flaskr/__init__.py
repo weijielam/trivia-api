@@ -48,7 +48,7 @@ def create_app(test_config=None):
     })
 
   '''
-  @TODO WIP: 
+  @TODO WIP: may need to clean up 
   Create an endpoint to handle GET requests for questions, 
   including pagination (every 10 questions). 
   This endpoint should return a list of questions, 
@@ -66,7 +66,6 @@ def create_app(test_config=None):
     selection = Question.query.all()
     total_questions = len(selection)
     current_questions = paginate_questions(request, selection)
-    print(current_questions)
 
     # abort if no questions
     if total_questions == 0:
@@ -74,7 +73,7 @@ def create_app(test_config=None):
 
     # get all categories
     categories = Category.query.all()
-    categories_data = {}
+    categories_data = {} # possibly needs to be renamed
     for category in categories:
       categories_data[category.id] = category.type
       
@@ -86,7 +85,7 @@ def create_app(test_config=None):
     })
   
   '''
-  @TODO WIP
+  @TODO DONE
   CUSTOM: return QUESTIONS_PER_PAGE
   '''
   def paginate_questions(request, selection):
@@ -106,7 +105,14 @@ def create_app(test_config=None):
   TEST: When you click the trash icon next to a question, the question will be removed.
   This removal will persist in the database and when you refresh the page. 
   '''
-
+  @app.route('/questions/<int:id>', methods=['DELETE'])
+  def delete_question(id):
+    try:
+      print("Hello World!")
+      return "Hello World!"
+    
+    except:
+      abort(422)
   '''
   @TODO: 
   Create an endpoint to POST a new question, 
