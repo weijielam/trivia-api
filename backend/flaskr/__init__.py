@@ -26,7 +26,7 @@ def create_app(test_config=None):
     response.headers.add('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS')
     return response  
   '''
-  @TODO: 
+  @TODO COMPLETED: 
   Create an endpoint to handle GET requests 
   for all available categories.
   '''
@@ -48,17 +48,39 @@ def create_app(test_config=None):
     })
 
   '''
-  @TODO: 
+  @TODO WIP: 
   Create an endpoint to handle GET requests for questions, 
   including pagination (every 10 questions). 
   This endpoint should return a list of questions, 
   number of total questions, current category, categories. 
-
+  
   TEST: At this point, when you start the application
   you should see questions and categories generated,
   ten questions per page and pagination at the bottom of the screen for three pages.
   Clicking on the page numbers should update the questions. 
   '''
+  @app.route('/questions')
+  def get_questions():
+    questions = Question.query.all()
+    categories = Category.query.all() 
+    data = {}
+    questions_data = {}
+
+    if len(questions) == 0:
+      abort(404)
+
+    for category in categories:
+      data[category.id] = category.type
+    
+    for question in questions: 
+      questions_data[question.id] = question.format()
+      
+    return jsonify({
+      'success': True,
+      'questions': questions_data,
+      'total_questions': len(questions),
+      'categories': data
+    })
 
   '''
   @TODO: 
