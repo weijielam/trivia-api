@@ -108,13 +108,21 @@ def create_app(test_config=None):
   @app.route('/questions/<int:id>', methods=['DELETE'])
   def delete_question(id):
     try:
-      print("Hello World!")
-      return "Hello World!"
-    
+      question = Question.query.get(id)
+      
+      if question is None:
+        abort(404)
+      
+      question.delete()
+
+      return jsonify({
+        'success': True,
+        'deleted': id
+      })
     except:
       abort(422)
   '''
-  @TODO: 
+  @TODO WIP: 
   Create an endpoint to POST a new question, 
   which will require the question and answer text, 
   category, and difficulty score.
@@ -123,9 +131,36 @@ def create_app(test_config=None):
   the form will clear and the question will appear at the end of the last page
   of the questions list in the "List" tab.  
   '''
+  @app.route('/questions', methods=['POST'])  
+  def create_question():
+    try:
+      data = request.get_json()
+      question = data.get('question', '')
+      answer = data.get('answer', '')
+      difficulty = data.get('difficulty', '')
+      category = data.get('category', '')
 
+      # data validation
+      if((question is None) or (answer is None) or (difficulty is None) or (category is None)):
+        abort(422)
+
+      new_question = Question(
+                question=question,
+                answer=answer,
+                difficulty=difficulty,
+                category=category)
+
+      new_question.insert()
+
+      return jsonify({
+        'success': True,
+        'message': 'Question successfully created!'
+      }), 201
+
+    except:
+      abort(422)
   '''
-  @TODO: 
+  @TODO WIP: On frontend need to implement route for question search 
   Create a POST endpoint to get questions based on a search term. 
   It should return any questions for whom the search term 
   is a substring of the question. 
@@ -134,7 +169,30 @@ def create_app(test_config=None):
   only question that include that string within their question. 
   Try using the word "title" to start. 
   '''
+  @app.route('/questions/search', methods=['POST'])
+  def search_questions():
+    try:
+      print('hello world')
+      data = request.get_json()
+      print(data)
+      search_term = data.get('searchTerm', '')
+      
+      questions = Question.query.filter(Question.question.ilike(f'%{search_term}%')).all()
+      
+      # no questions returns a 404 error
+      if len(questions) == 0:
+        abort(404)
+      
+      paginate_questions = paginate_questions(request, questions)
 
+      return jsonify({
+        'success': True,
+        'questions': paginate_questions,
+        'total_questions': len(Question.query.all())
+      }), 200
+    
+    except:
+      abort(422)
   '''
   @TODO: 
   Create a GET endpoint to get questions based on category. 
