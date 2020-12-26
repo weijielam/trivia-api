@@ -61,26 +61,43 @@ def create_app(test_config=None):
   '''
   @app.route('/questions')
   def get_questions():
-    questions = Question.query.all()
-    categories = Category.query.all() 
-    data = {}
-    questions_data = {}
+  
+    # get all questions + paginate
+    selection = Question.query.all()
+    total_questions = len(selection)
+    current_questions = paginate_questions(request, selection)
+    print(current_questions)
 
-    if len(questions) == 0:
+    # abort if no questions
+    if total_questions == 0:
       abort(404)
 
+    # get all categories
+    categories = Category.query.all()
+    categories_data = {}
     for category in categories:
-      data[category.id] = category.type
-    
-    for question in questions: 
-      questions_data[question.id] = question.format()
+      categories_data[category.id] = category.type
       
     return jsonify({
       'success': True,
-      'questions': questions_data,
-      'total_questions': len(questions),
-      'categories': data
+      'questions': current_questions,
+      'total_questions': total_questions,
+      'categories': categories_data
     })
+  
+  '''
+  @TODO WIP
+  CUSTOM: return QUESTIONS_PER_PAGE
+  '''
+  def paginate_questions(request, selection):
+    page = request.args.get('page', 1, type=int)
+    start = (page-1) * QUESTIONS_PER_PAGE
+    end = start + QUESTIONS_PER_PAGE
+
+    questions = [question.format() for question in selection]
+    current_questions = questions[start:end]
+
+    return current_questions
 
   '''
   @TODO: 
