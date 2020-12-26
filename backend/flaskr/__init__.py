@@ -14,11 +14,11 @@ def create_app(test_config=None):
   setup_db(app)
   
   '''
-  @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
+  @TODO COMPLETED: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
   '''
   CORS(app, resources={'/': {'origins': '*'}})
   '''
-  @TODO: Use the after_request decorator to set Access-Control-Allow
+  @TODO COMPLETED: Use the after_request decorator to set Access-Control-Allow
   '''
   @app.after_request
   def after_request(response):
@@ -33,7 +33,19 @@ def create_app(test_config=None):
   @app.route('/categories')
   def get_categories():
     categories = Category.query.all()
-    return str(categories)
+    data = {}
+
+    if len(categories) == 0:
+      abort(404)
+    
+    for category in categories:
+      data[category.id] = category.type  
+
+    print(data)
+    return jsonify({
+      'success': True,
+      'categories': data
+    })
 
   '''
   @TODO: 
