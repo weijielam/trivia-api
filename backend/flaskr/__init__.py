@@ -48,7 +48,7 @@ def create_app(test_config=None):
     })
 
   '''
-  @TODO WIP: may need to clean up 
+  @TODO COMPLETED
   Create an endpoint to handle GET requests for questions, 
   including pagination (every 10 questions). 
   This endpoint should return a list of questions, 
@@ -73,7 +73,7 @@ def create_app(test_config=None):
 
     # get all categories
     categories = Category.query.all()
-    categories_data = {} # possibly needs to be renamed
+    categories_data = {}
     for category in categories:
       categories_data[category.id] = category.type
       
@@ -85,7 +85,7 @@ def create_app(test_config=None):
     })
   
   '''
-  @TODO DONE
+  @TODO COMPLETED
   CUSTOM: return QUESTIONS_PER_PAGE
   '''
   def paginate_questions(request, selection):
@@ -99,7 +99,7 @@ def create_app(test_config=None):
     return current_questions
 
   '''
-  @TODO: 
+  @TODO COMPLETED 
   Create an endpoint to DELETE question using a question ID. 
 
   TEST: When you click the trash icon next to a question, the question will be removed.
@@ -122,7 +122,7 @@ def create_app(test_config=None):
     except:
       abort(422)
   '''
-  @TODO WIP: 
+  @TODO COMPLETED
   Create an endpoint to POST a new question, 
   which will require the question and answer text, 
   category, and difficulty score.
@@ -160,7 +160,7 @@ def create_app(test_config=None):
     except:
       abort(422)
   '''
-  @TODO WIP: On frontend need to implement route for question search 
+  @TODO COMPLETED
   Create a POST endpoint to get questions based on a search term. 
   It should return any questions for whom the search term 
   is a substring of the question. 
@@ -194,7 +194,7 @@ def create_app(test_config=None):
     except:
       abort(422)
   '''
-  @TODO: 
+  @TODO COMPLETED
   Create a GET endpoint to get questions based on category. 
 
   TEST: In the "List" tab / main screen, clicking on one of the 
