@@ -30,10 +30,25 @@ class TriviaTestCase(unittest.TestCase):
         pass
 
     """
-    TODO
+    TODO - will need to add comments/documentation
     Write at least one test for each test for successful operation and for expected errors.
     """
+    def test_get_categories(self):
+        response = self.client().get('/categories')
+        data = json.loads(response.data)
 
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['categories'])
+        self.assertEqual(len(data['categories']), 6)
+    
+    def test_get_paginated_questions(self):
+    
+    def test_delete_question(self):
+    
+    def test_create_new_question(self):
+
+    def test_get_questions_by_category(self):
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
