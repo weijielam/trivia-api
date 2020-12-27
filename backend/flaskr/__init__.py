@@ -270,6 +270,37 @@ def create_app(test_config=None):
   Create error handlers for all expected errors 
   including 404 and 422. 
   '''
+  @app.errorhandler(400)
+  def bad_request(error):
+    return jsonify({
+      'success': False,
+      'error': 400,
+      'message': 'Bad request'
+    })
+
+  @app.errorhandler(404)
+  def not_found(error):
+    return jsonify({
+      'success': False,
+      'error': 404,
+      'message': 'Resource not found. Input out of range.'
+    }), 404
+
+  @app.errorhandler(422)
+  def unprocessable(error):
+    return jsonify({
+      'success': False,
+      'error': 422, 
+      'message': 'unprocessable. Synax error.'
+    }), 422
+
+  @app.errorhandler(500)
+  def internal_server(error):
+    return jsonify({
+      'success': False,
+      'error': 500, 
+      'message': 'Sorry, the falut is us not you. Please try again later.'
+    }), 500
   
   return app
 
