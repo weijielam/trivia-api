@@ -183,11 +183,11 @@ def create_app(test_config=None):
       if len(questions) == 0:
         abort(404)
       
-      paginate_questions = paginate_questions(request, questions)
+      paginated_questions = paginate_questions(request, questions)
 
       return jsonify({
         'success': True,
-        'questions': paginate_questions,
+        'questions': paginated_questions,
         'total_questions': len(Question.query.all())
       }), 200
     
@@ -201,6 +201,24 @@ def create_app(test_config=None):
   categories in the left column will cause only questions of that 
   category to be shown. 
   '''
+  @app.route('/categories/<int:id>/questions')
+  def get_questions_by_categories(id):
+
+    category = Category.query.filter_by(id=id).one_or_none()
+
+    if (category is None):
+      abort(422)
+    
+    questions = Question.filter_by(category = id).all()
+
+    paginated_questions = paginate_questions(request, questions)
+
+    return jsonify({
+      'success': True,
+      'questions': paginated_questions,
+      'total_questions': len(questions),
+      'current_category': category.type 
+    })
 
 
   '''
