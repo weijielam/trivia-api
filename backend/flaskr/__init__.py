@@ -209,7 +209,7 @@ def create_app(test_config=None):
     if (category is None):
       abort(422)
     
-    questions = Question.filter_by(category = id).all()
+    questions = Question.query.filter_by(category = id).all()
 
     paginated_questions = paginate_questions(request, questions)
 
@@ -235,7 +235,7 @@ def create_app(test_config=None):
   @app.route('/quizzes', methods=['POST'])
   def play_quiz_question():
     data = request.get_json()
-    previous_question = data['previous_questions']
+    previous_questions = data['previous_questions']
     quiz_category = data['quiz_category']
 
     if((quiz_category is None) or (previous_questions is None)):
