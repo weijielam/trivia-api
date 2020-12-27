@@ -135,10 +135,10 @@ def create_app(test_config=None):
   def create_question():
     try:
       data = request.get_json()
-      question = data.get('question', '')
-      answer = data.get('answer', '')
-      difficulty = data.get('difficulty', '')
-      category = data.get('category', '')
+      question = data['question']
+      answer = data['answer']
+      difficulty = data['difficulty']
+      category = data['category']
 
       # data validation
       if((question is None) or (answer is None) or (difficulty is None) or (category is None)):
@@ -175,7 +175,7 @@ def create_app(test_config=None):
       print('hello world')
       data = request.get_json()
       print(data)
-      search_term = data.get('searchTerm', '')
+      search_term = data['searchTerm']
       
       questions = Question.query.filter(Question.question.ilike(f'%{search_term}%')).all()
       
@@ -232,6 +232,38 @@ def create_app(test_config=None):
   one question at a time is displayed, the user is allowed to answer
   and shown whether they were correct or not. 
   '''
+  @app.route('/quizzes', methods=['POST'])
+  def play_quiz_question():
+    data = request.get_json()
+    previous_question = data['previous_questions']
+    quiz_category = data['quiz_category']
+
+    if((quiz_category is None) or (previous_questions is None)):
+      abort(400)
+    
+    # default value -> return all questions
+    # else return questions from category
+    if(quiz_category['id'] == 0):
+      questions = Question.query.all()
+    else:
+      questions = Question.query.filter_by(category=category['id']).all()
+
+    def get_random_question():
+      return questions[random.randint(0, len(questions)-1)]
+
+    next_question = get_random_question()
+    found = True
+
+    while found:
+      if next_question.id in previous_questions:
+        next_question = get_random_question()
+      else:
+        found = False
+
+    return jsonify({
+      'success': True,
+      'question': next_question.format(),
+    }), 200
 
   '''
   @TODO: 
