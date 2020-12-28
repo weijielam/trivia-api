@@ -86,7 +86,6 @@ def create_app(test_config=None):
   
   '''
   @TODO COMPLETED
-  CUSTOM: return QUESTIONS_PER_PAGE
   '''
   def paginate_questions(request, selection):
     page = request.args.get('page', 1, type=int)
@@ -141,7 +140,7 @@ def create_app(test_config=None):
       category = data['category']
 
       # data validation
-      if((question is None) or (answer is None) or (difficulty is None) or (category is None)):
+      if((question == '') or (question == '') or (question == '') or (question == '')):
         abort(422)
 
       new_question = Question(
@@ -291,7 +290,7 @@ def create_app(test_config=None):
     return jsonify({
       'success': False,
       'error': 422, 
-      'message': 'unprocessable. Synax error.'
+      'message': 'Unprocessable entity.'
     }), 422
 
   @app.errorhandler(500)

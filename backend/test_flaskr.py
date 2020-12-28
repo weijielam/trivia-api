@@ -42,13 +42,61 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['categories'])
         self.assertEqual(len(data['categories']), 6)
     
-    def test_get_paginated_questions(self):
-    
-    def test_delete_question(self):
+    # 
+    def test_get_questions(self):
+        response = self.client().get('/questions')
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['categories'])
+        self.assertTrue(data['total_questions'])
+        self.assertTrue(data['questions'])
+        self.assertEqual(len(data['questions']), 10)
+
+    def test_delete_question_success(self):
+        print('test')
     
     def test_create_new_question(self):
+        test_data = {
+            'question': 'This is a test question',
+            'answer': 'This is a test answer',
+            'difficulty': 1,
+            'category': 1,
+        }
+
+        response = self.client().post('/questions', json=test_data)
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(data['success'], True)
+        self.assertEqual(data['message'], "Question successfully created!")
+    
+    def test_create_new_question_with_empty_data(self):
+        test_data = {
+            'question': '',
+            'answer': '',
+            'difficulty': 1,
+            'category': 1,
+        }
+        response = self.client().post('/questions', json=test_data)
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], "Unprocessable entity.")
+
+
 
     def test_get_questions_by_category(self):
+        #
+        print('test')
+
+    """Error handling tests"""
+    #
+    #
+    #
+    #
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
