@@ -275,7 +275,7 @@ def create_app(test_config=None):
     return jsonify({
       'success': False,
       'error': 400,
-      'message': 'Bad request'
+      'message': 'Bad request.'
     })
 
   @app.errorhandler(404)
@@ -283,7 +283,7 @@ def create_app(test_config=None):
     return jsonify({
       'success': False,
       'error': 404,
-      'message': 'Resource not found. Input out of range.'
+      'message': 'Resource not found.'
     }), 404
 
   @app.errorhandler(422)
@@ -299,7 +299,7 @@ def create_app(test_config=None):
     return jsonify({
       'success': False,
       'error': 500, 
-      'message': 'Sorry, the falut is us not you. Please try again later.'
+      'message': 'Sorry, the fault is us not you. Please try again later.'
     }), 500
   
   return app

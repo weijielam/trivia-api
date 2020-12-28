@@ -49,6 +49,7 @@ class TriviaTestCase(unittest.TestCase):
     Write at least one test for each test for successful operation and for expected errors.
     """
     def test_get_categories(self):
+        # make request and process response
         response = self.client().get('/categories')
         data = json.loads(response.data)
 
@@ -60,6 +61,7 @@ class TriviaTestCase(unittest.TestCase):
     
     # 
     def test_get_questions(self):
+        # make request and process response
         response = self.client().get('/questions')
         data = json.loads(response.data)
 
@@ -71,6 +73,9 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['questions'])
         self.assertEqual(len(data['questions']), 10)
 
+    """
+    DELETE Question Test Cases
+    """
     def test_delete_question_success(self):
         # create test question
         test_question_id = create_test_question()
@@ -111,7 +116,18 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], "Unprocessable entity.")
     
+    def test_delete_question_with_invalid_id(self):
+        # this tests an invalid id
+        response = self.client().delete('/questions/asdff3571')
+        data = json.loads(response.data)
+
+        # make assertions of response data
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Resource not found.')
+
     def test_create_new_question(self):
+        # create payload for post request
         test_data = {
             'question': 'This is a test question',
             'answer': 'This is a test answer',
@@ -119,6 +135,7 @@ class TriviaTestCase(unittest.TestCase):
             'category': 1,
         }
 
+        # make request and process response
         response = self.client().post('/questions', json=test_data)
         data = json.loads(response.data)
 
@@ -127,23 +144,37 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['message'], "Question successfully created!")
     
     def test_create_new_question_with_empty_data(self):
+        # create payload for post request
         test_data = {
             'question': '',
             'answer': '',
             'difficulty': 1,
             'category': 1,
         }
+
+        # make request and process response
         response = self.client().post('/questions', json=test_data)
         data = json.loads(response.data)
 
+        # make assertions of response data
         self.assertEqual(response.status_code, 422)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], "Unprocessable entity.")
 
+    def test_search_questions(self):
+        request_data = { 'searchTerm': 'Tom Hanks' }
 
+        # make request and process response
+        response = self.client().post('/questions/search', json=request_data)
+        data = json.loads(response.data)
+
+        # make assertions of response data
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertEqual(len(data['questions']), 1)
 
     def test_get_questions_by_category(self):
-        #
+        
         print('test')
 
     """Error handling tests"""
