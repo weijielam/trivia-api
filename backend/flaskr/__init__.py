@@ -116,6 +116,7 @@ def create_app(test_config=None):
 
       return jsonify({
         'success': True,
+        'message': "Question successfully deleted.",
         'deleted': id
       })
     except:
@@ -245,7 +246,7 @@ def create_app(test_config=None):
     if(quiz_category['id'] == 0):
       questions = Question.query.all()
     else:
-      questions = Question.query.filter_by(category=category['id']).all()
+      questions = Question.query.filter_by(category=quiz_category).all()
 
     def get_random_question():
       return questions[random.randint(0, len(questions)-1)]
