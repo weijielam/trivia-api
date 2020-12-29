@@ -45,9 +45,10 @@ class TriviaTestCase(unittest.TestCase):
         pass
 
     """
-    TODO - will need to add comments/documentation
     Write at least one test for each test for successful operation and for expected errors.
     """
+    
+    """GET Categories and Questions Test Cases"""
     def test_get_categories(self):
         # make request and process response
         response = self.client().get('/categories')
@@ -59,7 +60,6 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['categories'])
         self.assertEqual(len(data['categories']), 6)
     
-    # 
     def test_get_questions(self):
         # make request and process response
         response = self.client().get('/questions')
@@ -73,9 +73,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['questions'])
         self.assertEqual(len(data['questions']), 10)
 
-    """
-    DELETE Question Test Cases
-    """
+    """DELETE Question Test Cases"""
     def test_delete_question_success(self):
         # create test question
         test_question_id = create_test_question()
@@ -126,6 +124,8 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'Resource not found.')
 
+
+    """CREATE Question Test Cases"""
     def test_create_new_question(self):
         # create payload for post request
         test_data = {
@@ -161,6 +161,8 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], "Unprocessable entity.")
 
+
+    """Search Questions Test Cases"""
     def test_search_questions(self):
         request_data = { 'searchTerm': 'Tom Hanks' }
 
@@ -173,15 +175,62 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertEqual(len(data['questions']), 1)
 
+    """Test get questions by category"""
     def test_get_questions_by_category(self):
-        
+        # make request and process response
+        response = self.client().get('/categories/1/questions')
+        data = json.loads(response.data)
+
+        # make assertions of response data
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertNotEqual(len(data['questions']), 0)
+        self.assertEqual(data['current_category'], 'Science')
+
+    def test_get_questions_by_category_invalid_id(self):
         print('test')
 
-    """Error handling tests"""
-    #
-    #
-    #
-    #
+    """Play quiz questions Test Cases"""
+    def test_play_quiz_questions(self):
+        # create payload for post requests
+        test_data = {
+            'previous_questions': [2,4],
+            'quiz_category': {
+                'type': 'Entertainment',
+                'id': 5
+            }
+        }
+
+        # make request and process response
+        response = self.client().post('/quizzes', json=test_data)
+        data = json.loads(response.data)
+
+        print('response.data', response.data)
+        print('response.status_code', response.status_code)
+        print('data', data)
+
+        # make assertions of response data
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['question'], True)
+        
+        # assert question is returned & from correct category
+        self.assertTrue(data['question'])
+        self.assertTrue(data['question']['category'], 4)
+
+        # assert question returned is not on previous question list
+        self.assertTrue(data['question']['id'], 2)
+        self.assertTrue(data['question']['id'], 4)
+
+    def test_play_quiz_questions_no_data(self):
+        # make request and process response. no data is sent
+        response = self.client().post('/quizzes', json={})
+        data = json.loads(response.data)
+
+        # make assertions of response data
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(data['success'], False)
+        self.assertTrue(data['message'], 'Bad request.')
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
