@@ -168,7 +168,7 @@ def create_app(test_config=None):
             previous_questions = data['previous_questions']
             quiz_category = data['quiz_category']
 
-            # default value -> return all questions
+            # default value 0 -> return all questions
             # else return questions from category
             if(quiz_category['id'] == 0):
                 questions = Question.query.all()
@@ -224,7 +224,7 @@ def create_app(test_config=None):
         return jsonify({
             'success': False,
             'error': 500, 
-            'message': 'Sorry, the fault is us not you. Please try again later.'
+            'message': 'Internal server error. Please try again later.'
         }), 500
     
     return app

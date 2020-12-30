@@ -175,7 +175,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertEqual(len(data['questions']), 1)
 
-    """Test get questions by category"""
+    """Get questions by category Test Cases"""
     def test_get_questions_by_category(self):
         # make request and process response
         response = self.client().get('/categories/1/questions')
@@ -188,7 +188,15 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['current_category'], 'Science')
 
     def test_get_questions_by_category_invalid_id(self):
-        print('test')
+        # make request and process response
+        response = self.client().get('/categories/123456789/questions')
+        data = json.loads(response.data)
+
+        # make assertions of response data
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], "Unprocessable entity.")
+
 
     """Play quiz questions Test Cases"""
     def test_play_quiz_questions(self):
