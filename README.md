@@ -29,13 +29,14 @@ Once you have your virtual environment setup and running, install dependencies b
 ```pip install -r requirements.txt```
 
 This will install all of the required packages we selected within the requirements.txt file.
-Key Dependencies
 
-    Flask is a lightweight backend microservices framework. Flask is required to handle requests and responses.
+##### Key Dependencies
 
-    SQLAlchemy is the Python SQL toolkit and ORM we'll use handle the lightweight sqlite database. You'll primarily work in app.py and can reference models.py.
+- [Flask](http://flask.pocoo.org/)  is a lightweight backend microservices framework. Flask is required to handle requests and responses.
 
-    Flask-CORS is the extension we'll use to handle cross origin requests from our frontend server.
+- [SQLAlchemy](https://www.sqlalchemy.org/) is the Python SQL toolkit and ORM we'll use handle the lightweight sqlite database. You'll primarily work in app.py and can reference models.py. 
+
+- [Flask-CORS](https://flask-cors.readthedocs.io/en/latest/#) is the extension we'll use to handle cross origin requests from our frontend server. 
 
 #### Installing frontend dependencies
 
@@ -220,7 +221,7 @@ The error codes currently returned are:
   "total_questions": 20
 }
 ```
-#### DELETE /questions/<int:id\>
+#### DELETE /questions/<int:id>
 - Deletes a question that was specified by id from the url parameter
 - Example: ```curl -X DELETE http://127.0.0.1:5000/questions/2
 {
