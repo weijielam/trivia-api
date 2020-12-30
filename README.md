@@ -223,7 +223,7 @@ The error codes currently returned are:
 ```
 #### DELETE /questions/<int:id>
 - Deletes a question that was specified by id from the url parameter
-- Example: ```curl -X DELETE http://127.0.0.1:5000/questions/2
+- Example: ```curl -X DELETE http://127.0.0.1:5000/questions/2```
 {
   "deleted": 2, 
   "message": "Question successfully deleted.", 
@@ -260,7 +260,7 @@ The error codes currently returned are:
   "total_questions": 20
 }
 ```
-#### GET /categories/<int:id\>/questions
+#### GET /categories/<int:id>/questions
 - Gets questions from a category specified by id from the url parameter
 - Example: `curl http://127.0.0.1:5000/categories/1/questions`
 ```json
