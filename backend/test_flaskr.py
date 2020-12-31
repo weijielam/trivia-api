@@ -240,6 +240,17 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertTrue(data['message'], 'Bad request.')
 
+    """Error Handling Test Cases"""
+    def test_error_not_found_404(self):
+        # make request and process response
+        response = self.client().post('/asdfghjk', json={})
+        data = json.loads(response.data)
+
+        # make assertions of response data
+        self.assertEquals(response.status_code, 404)
+        self.assertEquals(data['success'], False)
+        self.assertTrue(data['message'], 'Resource not found.')
+
 # Make the tests conveniently executable
 if __name__ == "__main__":
     unittest.main()
